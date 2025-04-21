@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECG</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="https://kit.fontawesome.com/15343cc4ba.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.panzoom/3.2.2/jquery.panzoom.min.js"></script>
+</head>
+<body>
+    <section id="header">
+        <a href="home.html" aria-label="Logo"><img src="image/2566x1440.png" alt="" class="logo"></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="home.html" aria-label="Home">Home</a></li>
+                <li><a href="" aria-label="Contact">Contact</a></li>
+                <li><a href="" aria-label="ECG">ECG</a></li>
+                <li><a href="" aria-label="Login"><i class="fa-solid fa-user"></i></a></li>
+                <li style="display: none;"><a href="" aria-label="User" id="user"><i class="fa-solid fa-user"></i></a></li>
+            </ul>
+        </div>
+    </section>
+    <section id="ECGDetail">
+        <h2>Biểu đồ ECG</h2>
+        <div class="diagram-container">
+            <img id="ecgImage" src="" alt="ECG Chart" loading="lazy">
+            <div id="myresult" class="img-zoom-result"></div>
+        </div>        
+        <div class="control-button">
+            <button type="button" onclick="loadLead('all_leads')">All Leads</button>
+            <button type="button" onclick="loadLead('I')">Lead I</button>
+            <button type="button" onclick="loadLead('II')">Lead II</button>
+            <button type="button" onclick="loadLead('III')">Lead III</button>
+            <button type="button" onclick="loadLead('aVR')">aVR</button>
+            <button type="button" onclick="loadLead('aVL')">aVL</button>
+            <button type="button" onclick="loadLead('aVF')">aVF</button>
+            <button type="button" onclick="loadLead('V1')">V1</button>
+            <button type="button" onclick="loadLead('V2')">V2</button>
+            <button type="button" onclick="loadLead('V3')">V3</button>
+            <button type="button" onclick="loadLead('V4')">V4</button>
+            <button type="button" onclick="loadLead('V5')">V5</button>
+            <button type="button" onclick="loadLead('V6')">V6</button>
+        </div>  
+        <div class="diagnosis">
+            <p>
+                Tuoi:... <br>
+                Gioi tinh:... <br>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Omnis vel iusto voluptates molestiae veniam provident aspernatur quibusdam optio laudantium? At, ipsam consequatur itaque perspiciatis nisi sunt et molestias quia eius.
+            </p>
+        </div>
+    </section>
+    <script src="ECGDetailController.js"></script>
+</body>
+</html>

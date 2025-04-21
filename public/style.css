@@ -1,0 +1,434 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header section */
+#header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 60px;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background-color: #d9dbdb;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo */
+.logo {
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Navbar */
+#navbar {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+#navbar li {
+    list-style: none;
+}
+
+#navbar li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 8px 12px;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+}
+
+#navbar li a:hover {
+    background-color: #b5b5b5;
+    color: #000;
+}
+/* Adv (hero) section */
+#adv_section {
+    height: 600px;
+    background-image: url("image/2566x1440.png");
+    background-size: cover;
+    background-position: center;
+    padding: 0 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    color: #fff;
+    position: relative;
+}
+
+/* Overlay (tạo bóng tối nhẹ để chữ nổi bật hơn) */
+#adv_section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4); /* Điều chỉnh độ tối nền */
+    z-index: 0;
+    border-radius: inherit;
+}
+
+/* Nội dung phía trên overlay */
+#adv_section h1,
+#adv_section h3,
+#adv_section button {
+    z-index: 1;
+}
+
+#adv_section h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+#adv_section h3 {
+    font-size: 20px;
+    margin: 20px 0;
+}
+
+#signUpBtn {
+    background-color: #00bcd4;
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#signUpBtn:hover {
+    background-color: #0195a0;
+}
+
+/* info section */
+#info_section::before {
+    content: "";
+    display: block;
+    height: 1px;
+    background-color: #68b2d1;
+    margin: 20px 100px;
+}
+
+#info_section::after {
+    content: "";
+    display: block;
+    height: 1px;
+    background-color: #68b2d1;
+    margin: 20px 100px;
+}
+
+#info_section {
+    padding-top: 30px;
+    text-align: center;
+}
+
+#info_section .article_container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 50px;
+
+}
+
+.design1 {
+    width: 15%;
+    min-width: 240px;
+    height: 350px;
+    padding: 10px;
+    border: 1px solid #cad0df;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 10px;
+    transition: box-shadow 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
+}
+
+.design1:hover {
+    box-shadow: 5px 5px 15px #5f5d5d;
+}
+
+.design1 img {
+    width: 100%;
+    max-height: 240px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.design1 p {
+    text-align: start;
+    font-size: 16px;
+    width: 100%;
+    margin: 4px 0;
+    color: #333;
+}
+
+.design1 a {
+    text-decoration: none;
+    color: #1a73e8;
+    font-weight: bold;
+    margin-top: auto;
+    align-self: flex-start;
+}
+
+/* contact_section */
+#contact_section {
+    height: 500px;
+    background-image: url("image/hust.jpg");
+    background-size: cover;
+    padding: 0 60px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#contact_section .design1 {
+    margin: auto;
+    width: 20%;
+    min-width: 250px;
+    height: 400px;
+}
+
+/* Upload Section */
+#input_file {
+    padding: 40px 60px;
+    background-color: #f5f7fa;
+}
+
+.input_container {
+    background: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    max-width: 500px;
+    margin: auto;
+    text-align: center;
+}
+
+.input_container h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: #333;
+}
+
+.input_container input[type="file"] {
+    margin-bottom: 15px;
+    padding: 5px;
+}
+
+.input_container button {
+    background-color: #1f1f2e;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.input_container button:hover {
+    background-color: #00bcd4;
+}
+
+#viewChartLink {
+    display: inline-block;
+    margin-top: 15px;
+    color: #00bcd4;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* old patient */
+#old_patient {
+    padding: 40px 60px;
+    background-color: #ffffff;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#old_patient .design1 {
+    height: 170px;
+}
+
+/* Login & SignUp */
+#login {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.container {
+    background: #fff;
+    width: 90%;
+    max-width: 450px;
+    padding: 1.5rem;
+    margin: 50px auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 1, 0.9);
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    padding: 10px 0;
+    position: relative;
+}
+
+.input-group i {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    color: black;
+}
+
+.input-group input {
+    color: inherit;
+    width: 95%;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #757575;
+    padding-left: 30px; /* Để tránh đè lên icon */
+    font-size: 15px;
+    outline: none;
+    transition: border-bottom 0.3s ease;
+}
+
+.input-group input:focus {
+    border-bottom: 2px solid hsl(327, 90%, 28%);
+}
+
+/* Ẩn label nhưng giữ cho screen reader */
+label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.btn {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    width: 100%;
+    padding: 10px 0;
+    border: 0.5px solid #00a2e7;
+    border-radius: 10px;
+    background-color: #0ea3e4;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #007fbd;
+}
+
+.link {
+    display: flex;
+    font-weight: bold;
+    font-size: 16px;
+    justify-content: space-between;
+    padding: 0 40px;
+    margin-top: 10px;
+}
+
+.link a {
+    text-decoration: none;
+    color: #3a3a3a;
+}
+
+.link a:hover {
+    color: #00a2e7;
+}
+
+/* ECG */
+#ECGDetail {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 30px 30px;
+}
+
+.diagram-container {
+    width: 100%;
+    height: 400px;
+    display: flex;
+    position: relative;
+}
+
+.diagram-container img {
+    width: 80%;
+    height: auto;
+    object-fit: fill;
+}
+
+.img-zoom-result {
+    border: 1px solid #d4d4d4;
+    border-radius: 5px;
+    position: relative;
+}
+
+.img-zoom-lens {
+    position: absolute;
+    border: 1px solid #000;
+    z-index: 100;
+}
+
+.control-button {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+}
+
+.control-button button {
+    margin: 5px;
+    font-size: 16px;
+    width: 100px;
+    height: 30px;
+    border: solid 0.5px #39d68d;
+    border-radius: 10px;
+    background-color: #1db26c;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.diagnosis {
+    box-sizing: border-box;
+    margin-top: 10px;
+    padding: 10px 10px;
+    width: 100%;
+    min-height: 100px;
+    border: 0.5px solid #3a3a3a;
+    border-radius: 10px;
+}
+
+.footer {
+    text-align: center;
+    padding: 40px;
+    background-color: #e0e0e0;
+    margin-top: 0;
+    font-size: 0.9em;
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECG</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="https://kit.fontawesome.com/15343cc4ba.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <section id="header">
+        <a href="home.html" aria-label="Logo"><img src="image/2566x1440.png" alt="" class="logo"></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="home.html" aria-label="Home">Home</a></li>
+                <li><a href="home.html#contact_section" aria-label="Contact">Contact</a></li>
+                <li><a href="#" aria-label="ECG">ECG</a></li>
+                <li><a href="login.html" aria-label="Login"><i class="fa-solid fa-user"></i></a></li>
+                <li style="display: none;"><a href="" aria-label="User" id="user"><i class="fa-solid fa-user"></i></a></li>
+            </ul>
+        </div>
+    </section>
+    <section id="input_file">
+        <div class="input_container">
+            <h2>Chọn file ECG (.mat) để vẽ biểu đồ</h2>
+            <input type="file" placeholder="file" id="fileInput" accept=".mat">
+            <button onclick="uploadFile()">Tải lên</button>
+            <br><br>
+            <a id="viewChartLink" href="#" target="_blank" style="display: none;">Xem biểu đồ</a>
+        </div>
+    </section>
+    <section id="old_patient">
+        <div class="design1">
+            <!-- <img src="image/patient_avatar.png" alt="Avatar bệnh nhân"> -->
+            <p><strong>Tên:</strong> aaaa</p>
+            <p><strong>Giới tính:</strong> Nam</p>
+            <p><strong>Tuổi:</strong> 70</p>
+            <p><strong>Ngày:</strong> 04/03/2025</p>
+            <p><strong>Chẩn đoán:</strong> AF</p>
+            <a href="#">Xem chi tiết</a>
+        </div>
+    </section>    
+    <script src="ECGController.js"></script>
+</body>
+</html>
