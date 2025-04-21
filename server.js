@@ -17,9 +17,9 @@ mongoose.connect("mongodb+srv://zzzvuongldk:Vl271104*@cluster0.imgttoi.mongodb.n
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
-    console.log("✅ Connected to MongoDB Atlas");
+    console.log("Connected to MongoDB Atlas");
 }).catch((err) => {
-    console.error("❌ MongoDB connection error:", err);
+    console.error("MongoDB connection error:", err);
 });
 
 // Cấu hình multer để lưu file tải lên vào thư mục "uploads/"

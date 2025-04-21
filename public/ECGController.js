@@ -8,7 +8,7 @@ function uploadFile() {
     let formData = new FormData();
     formData.append("file", fileInput.files[0]);
 
-    fetch("http://localhost:3000/upload", {
+    fetch("https://ecgweb.onrender.com/upload", {
         method: "POST",
         body: formData
     })
