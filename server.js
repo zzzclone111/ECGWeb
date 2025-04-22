@@ -56,7 +56,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         await fs.ensureDir(outputFolder);
 
         // Gọi script Python để xử lý file
-        exec(`python process_ecg_v1.py "${inputFilePath}" "${outputFolder}"`, async (error) => {
+        exec(`python process_ecg.py "${inputFilePath}" "${outputFolder}"`, async (error) => {
             if (error) {
                 console.error("Error executing Python script:", error);
                 return res.status(500).json({ error: "Error processing file" });
