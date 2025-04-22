@@ -8,7 +8,7 @@ function uploadFile() {
     let formData = new FormData();
     formData.append("file", fileInput.files[0]);
 
-    fetch("https://ecgweb.onrender.com/upload", {
+    fetch("https://vuongle.id.vn/upload", {
         method: "POST",
         body: formData
     })
