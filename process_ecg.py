@@ -647,3 +647,95 @@ plt.tight_layout()
 output_file = os.path.join(output_folder, "all_leads.png")
 plt.savefig(output_file)
 plt.close()
+
+
+# R peak only
+plt.figure(figsize=(42, 7))  # Kích thước hình ảnh
+
+# Kích thước cửa sổ trượt và ngưỡng
+window_size = 0.1  # Kích thước cửa sổ trượt (giây)
+window_samples = int(window_size * fs)  # Số mẫu trong một cửa sổ
+step_size = 0.05  # Kích thước bước dịch (giây)
+step_samples = int(step_size * fs)  # Số mẫu trong một bước dịch
+threshold_leads = 8  # Số lượng đạo trình có đỉnh R trong cửa sổ
+
+# Danh sách lưu các khung thời gian có trên 8 đạo trình có đỉnh R
+highlighted_windows = []
+
+# Tìm các khung thời gian có trên 8 đạo trình có đỉnh R
+for start_idx in range(0, len(ecg_data[0]) - window_samples + 1, step_samples):
+    end_idx = start_idx + window_samples
+    lead_count = 0
+
+    for i in range(12):
+        ecg_signal = ecg_data[i, :]
+        
+        # Phát hiện đỉnh R
+        QRS_detector = Pan_Tompkins_Plus_Plus()
+        r_peaks = QRS_detector.rpeak_detection(ecg_signal, fs)
+        r_peaks = np.array(r_peaks, dtype=int)
+
+        # Kiểm tra xem có đỉnh R nào trong cửa sổ không
+        r_peaks_in_window = r_peaks[(r_peaks >= start_idx) & (r_peaks < end_idx)]
+        if len(r_peaks_in_window) > 0:
+            lead_count += 1
+
+    # Nếu có trên threshold_leads đạo trình có đỉnh R, đánh dấu khung thời gian
+    if lead_count >= threshold_leads:
+        # Kiểm tra nếu cửa sổ bị đè lên cửa sổ trước đó
+        if highlighted_windows and highlighted_windows[-1][1] > start_idx / fs:
+            # Chỉ giữ lại cửa sổ có số lượng đạo trình lớn hơn
+            if lead_count > highlighted_windows[-1][2]:
+                highlighted_windows[-1] = (
+                    start_idx / fs,  # Thời gian bắt đầu của cửa sổ hiện tại
+                    end_idx / fs,    # Thời gian kết thúc của cửa sổ hiện tại
+                    lead_count       # Số lượng đạo trình lớn nhất
+                )
+        else:
+            highlighted_windows.append((start_idx / fs, end_idx / fs, lead_count))
+
+# Vẽ tín hiệu ECG của từng đạo trình và đánh dấu các đỉnh R
+for i in range(12):
+    ecg_signal = ecg_data[i, :]
+    
+    # Phát hiện đỉnh R
+    QRS_detector = Pan_Tompkins_Plus_Plus()
+    r_peaks = QRS_detector.rpeak_detection(ecg_signal, fs)
+    r_peaks = np.array(r_peaks, dtype=int)
+
+    # Phân loại các đỉnh R
+    r_peaks_in_highlighted = []
+    r_peaks_outside_highlighted = []
+
+    for r_peak in r_peaks:
+        r_peak_time = r_peak / fs
+        if any(window[0] <= r_peak_time <= window[1] for window in highlighted_windows):
+            r_peaks_in_highlighted.append(r_peak)
+        else:
+            r_peaks_outside_highlighted.append(r_peak)
+
+    # Vẽ tín hiệu và đánh dấu các đỉnh R
+    plt.scatter(time[r_peaks_in_highlighted], ecg_signal[r_peaks_in_highlighted], color='blue', marker='o', label="R-peaks (Highlighted)" if i == 0 else None)
+    plt.scatter(time[r_peaks_outside_highlighted], ecg_signal[r_peaks_outside_highlighted], color='red', marker='o', label="R-peaks (Outside)" if i == 0 else None)
+
+# Đánh dấu các khung thời gian có trên 8 đạo trình có đỉnh R
+for window in highlighted_windows:
+    plt.axvspan(window[0], window[1], color='yellow', alpha=0.3, label="Highlighted Window" if window == highlighted_windows[0] else None)
+
+# Cấu hình trục và lưới chuẩn ECG
+plt.xticks(np.arange(0, max(time) + 1, 0.2))
+plt.yticks(np.arange(-2, 2, 0.5))
+plt.minorticks_on()
+plt.grid(True, which='minor', linestyle=':', linewidth=0.5, color='gray')
+plt.grid(True, which='major', linestyle='-', linewidth=1, color='black')
+
+# Đặt tiêu đề và nhãn
+plt.title("R-Peak Alignment Test")
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude (mV)")
+plt.legend()
+
+# Lưu hình ảnh
+output_file = os.path.join(output_folder, "r_peaks_only.png")
+plt.savefig(output_file)
+plt.close()
