@@ -179,6 +179,20 @@ app.get("/history", async (req, res) => {
     }
 });
 
+app.post("/api/predict", async (req, res) => {
+    try {
+        const response = await fetch("http://52.65.74.216:8000/predict/", {
+            method: "POST",
+            body: JSON.stringify(req.body),
+        });
+        const data = await response.json();
+        res.json(data);
+    } catch (err) {
+        console.error("Proxy error:", err);
+        res.status(500).json({ error: "Proxy failed" });
+    }
+});
+
 // Khởi động server
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {

@@ -10,7 +10,7 @@ async function uploadFile() {
 
     try {
         // Gửi tới API chẩn đoán
-        let response = await fetch("http://52.65.74.216:8000/predict/", {
+        let response = await fetch("https://vuongle.id.vn/api/predict/", {
             method: "POST",
             body: formData
         });
