@@ -1,4 +1,4 @@
-function uploadFile() {
+async function uploadFile() {
     let fileInput = document.getElementById("fileInput");
     if (!fileInput.files.length) {
         alert("Vui lòng chọn file .mat!");
@@ -8,24 +8,46 @@ function uploadFile() {
     let formData = new FormData();
     formData.append("file", fileInput.files[0]);
 
-    fetch("https://vuongle.id.vn/upload", {
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.folder) {
+    try {
+        // 1. Gửi đến server EC2 để xử lý chẩn đoán
+        let response = await fetch("http://ec2-16-176-32-57.ap-southeast-2.compute.amazonaws.com:8000/predict", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) throw new Error("Lỗi khi gửi đến server EC2");
+
+        let result = await response.json();
+
+        if (!result || !result.diagnosis) {
+            throw new Error("Không nhận được kết quả chẩn đoán");
+        }
+
+        // 2. Gửi kết quả chẩn đoán về vuongle.id.vn để vẽ biểu đồ
+        let viewResponse = await fetch("https://vuongle.id.vn/upload", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(result)
+        });
+
+        let viewData = await viewResponse.json();
+
+        if (viewData.folder && result.diagnosis) {
+            // result.folder = viewData.folder;
+            sessionStorage.setItem("ecg_result_" + viewData.folder, JSON.stringify(result));
             let link = document.getElementById("viewChartLink");
-            link.href = "ECGDetail.html?folder=" + encodeURIComponent(data.folder);
+            link.href = "ECGDetail.html?folder=" + encodeURIComponent(viewData.folder);
             link.style.display = "block";
             link.innerText = "Xem biểu đồ";
         } else {
-            alert("Lỗi: " + data.error);
+            alert("Lỗi từ server vẽ biểu đồ: " + viewData.error);
         }
-    })
-    .catch(error => {
+
+    } catch (error) {
         alert("Có lỗi xảy ra: " + error.message);
-    });
+    }
 }
 
 async function loadHistory() {

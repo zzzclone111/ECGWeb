@@ -9,6 +9,14 @@ if (folderPath) {
     console.error("Không tìm thấy ảnh ECG.");
 }
 
+const result = JSON.parse(sessionStorage.getItem("ecg_result_" + folderPath));
+if (result) {
+    document.getElementById("diagnosis").innerText = "Chẩn đoán: " + result.diagnosis;
+    document.getElementById("patient").innerText = "Mã bệnh nhân: " + result.patient_id;
+} else {
+    document.getElementById("diagnosis").innerText = "Không tìm thấy kết quả chẩn đoán.";
+}  
+
 const leadNames = ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6", "all_leads"];
 
 // Hàm thay đổi ảnh khi bấm vào nút
