@@ -42,7 +42,7 @@ async function uploadFile() {
             link.style.display = "block";
             link.innerText = "Xem biểu đồ";
         } else {
-            alert("Lỗi từ server vẽ biểu đồ: " + viewData.error);
+            alert("Lỗi vẽ biểu đồ: " + viewData.error);
         }
 
     } catch (error) {
