@@ -9,10 +9,40 @@ if (folderPath) {
     console.error("Không tìm thấy ảnh ECG.");
 }
 
-const result = JSON.parse(sessionStorage.getItem("ecg_result_" + folderPath));
-if (result) {
-    document.getElementById("diagnosis").innerText = "Chẩn đoán: " + result.diagnosis;
-    document.getElementById("patient").innerText = "Mã bệnh nhân: " + result.patient_id;
+console.log("Key session:", "ecg_result_" + folderPath);
+console.log("Stored data:", sessionStorage.getItem("ecg_result_" + folderPath));
+
+const prediction = JSON.parse(sessionStorage.getItem("ecg_result_" + folderPath));
+console.log("Prediction:", prediction);
+
+const labels = [
+    "Normal",
+    "Atrial fibrillation (AF)",
+    "First-degree atrioventricular block (I-AVB)",
+    "Left bundle brunch block (LBBB)",
+    "Right bundle brunch block (RBBB)",
+    "Premature atrial contraction (PAC)",
+    "Premature ventricular contraction (PVC)",
+    "ST-segment depression (STD)",
+    "ST-segment elevated (STE)"
+];
+
+if (prediction && prediction.mean_probs && prediction.predicted_labels) {
+    const diagnosisList = document.getElementById("diagnosis");
+    diagnosisList.innerHTML = "<strong>Chẩn đoán:</strong><br>";
+
+    let foundDiagnosis = false;
+
+    prediction.predicted_labels.forEach((val, index) => {
+        if (val === 1) {
+            diagnosisList.innerHTML += `- ${labels[index]} (Xác suất: ${(prediction.mean_probs[index] * 100).toFixed(2)}%)<br>`;
+            foundDiagnosis = true;
+        }
+    });
+
+    if (!foundDiagnosis) {
+        diagnosisList.innerHTML += "- Normal (Không phát hiện bệnh bất thường)";
+    }
 } else {
     document.getElementById("diagnosis").innerText = "Không tìm thấy kết quả chẩn đoán.";
 }  

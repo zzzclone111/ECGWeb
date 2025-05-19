@@ -9,8 +9,8 @@ async function uploadFile() {
     formData.append("file", fileInput.files[0]);
 
     try {
-        // 1. Gửi đến server EC2 để xử lý chẩn đoán
-        let response = await fetch("http://ec2-16-176-32-57.ap-southeast-2.compute.amazonaws.com:8000/predict", {
+        // Gửi tới API chẩn đoán
+        let response = await fetch("http://52.65.74.216:8000/predict/", {
             method: "POST",
             body: formData
         });
@@ -19,24 +19,26 @@ async function uploadFile() {
 
         let result = await response.json();
 
-        if (!result || !result.diagnosis) {
+        if (!result || !result.prediction || !result.prediction.predicted_labels) {
             throw new Error("Không nhận được kết quả chẩn đoán");
         }
 
-        // 2. Gửi kết quả chẩn đoán về vuongle.id.vn để vẽ biểu đồ
+        // Gửi đến server vẽ biểu đồ (node server ở localhost)
         let viewResponse = await fetch("https://vuongle.id.vn/upload", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(result)
+            body: formData // gửi lại file cho server vẽ ảnh
         });
 
         let viewData = await viewResponse.json();
 
-        if (viewData.folder && result.diagnosis) {
-            // result.folder = viewData.folder;
-            sessionStorage.setItem("ecg_result_" + viewData.folder, JSON.stringify(result));
+        if (viewData.folder && result.prediction) {
+            const sessionKey = "ecg_result_" + viewData.folder;
+            sessionStorage.setItem(sessionKey, JSON.stringify(result.prediction));
+
+            // Debug log
+            console.log("Lưu sessionStorage:", sessionKey);
+            console.log("Dữ liệu lưu:", result.prediction);
+
             let link = document.getElementById("viewChartLink");
             link.href = "ECGDetail.html?folder=" + encodeURIComponent(viewData.folder);
             link.style.display = "block";
@@ -49,6 +51,7 @@ async function uploadFile() {
         alert("Có lỗi xảy ra: " + error.message);
     }
 }
+
 
 async function loadHistory() {
     try {
