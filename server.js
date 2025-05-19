@@ -179,29 +179,6 @@ app.get("/history", async (req, res) => {
     }
 });
 
-app.post("/api/predict", upload.single("file"), async (req, res) => {
-    try {
-        const form = new FormData();
-        form.append("file", fs.createReadStream(req.file.path), req.file.originalname);
-
-        const response = await fetch("http://52.65.74.216:8000/predict/", {
-            method: "POST",
-            body: form,
-            headers: form.getHeaders()
-        });
-
-        const data = await response.json();
-
-        // Xóa file sau khi gửi xong
-        fs.unlinkSync(req.file.path);
-
-        res.json(data);
-    } catch (err) {
-        console.error("Proxy error:", err);
-        res.status(500).json({ error: "Proxy failed" });
-    }
-});
-
 // Khởi động server
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
