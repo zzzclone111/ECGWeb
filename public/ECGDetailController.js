@@ -41,7 +41,7 @@ if (prediction && prediction.mean_probs && prediction.predicted_labels) {
     });
 
     if (!foundDiagnosis) {
-        diagnosisList.innerHTML += "- Normal (Không phát hiện bệnh bất thường)";
+        diagnosisList.innerHTML += "- Không nhận dạng được bệnh lý nào.";
     }
 } else {
     document.getElementById("diagnosis").innerText = "Không tìm thấy kết quả chẩn đoán.";
