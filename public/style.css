@@ -49,13 +49,13 @@
 }
 
 #navbar li a:hover {
-    background-color: #b5b5b5;
+    background-color: #c8c8c8;
     color: #000;
 }
 /* Adv (hero) section */
 #adv_section {
     height: 600px;
-    background-image: url("image/2566x1440.png");
+    background-image: url("image/ECG\ Ad.jpg");
     background-size: cover;
     background-position: center;
     padding: 0 60px;
