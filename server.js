@@ -1,6 +1,6 @@
 const express = require("express"); // Framework Express để tạo server web
 const multer = require("multer"); // Multer để xử lý file upload
-const { spawn } = require("child_process"); // exec để chạy lệnh hệ thống (Python script)
+const { exec } = require("child_process"); // exec để chạy lệnh hệ thống (Python script)
 const path = require("path"); // Module path để xử lý đường dẫn file
 const bcrypt = require("bcryptjs"); // Mã hóa mật khẩu
 const jwt = require("jsonwebtoken"); // JSON Web Token
@@ -53,39 +53,35 @@ app.use(express.urlencoded({ extended: true })); // Xử lý form data
 // API nhận file ECG (.mat) từ phía client
 app.post("/upload", upload.single("file"), async (req, res) => {
     if (!req.file) {
-        return res.status(400).json({ error: "Không có file được tải lên" });
+        return res.status(400).json({ error: "No file uploaded" });
     }
 
     const inputFilePath = req.file.path;
     const outputFolder = path.join(__dirname, "public", "ecg_results", Date.now().toString());
 
     try {
+        // Tạo thư mục lưu kết quả nếu chưa có
         await fs.ensureDir(outputFolder);
 
-        // Chạy script Python bằng spawn (không dùng exec)
-        const py = spawn("python", ["process_ecg.py", inputFilePath, outputFolder]);
-
-        py.stdout.on("data", (data) => {
-            console.log(`stdout: ${data}`);
-        });
-
-        py.stderr.on("data", (data) => {
-            console.error(`stderr: ${data}`);
-        });
-
-        py.on("close", async (code) => {
-            await fs.remove(inputFilePath); // Xóa file gốc sau xử lý
-
-            if (code !== 0) {
-                return res.status(500).json({ error: `Xử lý thất bại (mã lỗi ${code})` });
+        // Gọi script Python để xử lý file
+        exec(`python process_ecg.py "${inputFilePath}" "${outputFolder}"`, async (error) => {
+            if (error) {
+                console.error("Error executing Python script:", error);
+                return res.status(500).json({ error: "Error processing file" });
             }
 
-            res.json({ folder: `ecg_results/${path.basename(outputFolder)}` });
-        });
+            try {
+                // Xóa file tạm thời sau khi xử lý xong
+                await fs.remove(inputFilePath);
 
+                // Trả về đường dẫn thư mục chứa ảnh
+                res.json({ folder: `ecg_results/${path.basename(outputFolder)}` });
+            } catch (err) {
+                res.status(500).json({ error: "Error processing results" });
+            }
+        });
     } catch (err) {
-        console.error("Lỗi khi xử lý file:", err);
-        res.status(500).json({ error: "Lỗi xử lý file" });
+        res.status(500).json({ error: "Error creating directory" });
     }
 });
 
