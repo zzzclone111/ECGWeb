@@ -23,20 +23,28 @@ mongoose.connect("mongodb+srv://zzzvuongldk:Vl271104*@cluster0.imgttoi.mongodb.n
 });
 
 // Cấu hình multer để lưu file tải lên vào thư mục "uploads/"
-var storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
         const uploadDir = path.join(__dirname, "uploads");
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
+        fs.ensureDirSync(uploadDir);
         cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}_${file.originalname}`);
     },
-})
+});
 
-var upload = multer({ storage: storage });
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // Tối đa 5MB
+    fileFilter: (req, file, cb) => {
+        const ext = path.extname(file.originalname).toLowerCase();
+        if (ext !== ".mat") {
+            return cb(new Error("Chỉ hỗ trợ file .mat"));
+        }
+        cb(null, true);
+    }
+});
 
 app.use(express.static("public"));
 app.use(express.json()); // Xử lý dữ liệu JSON
@@ -45,35 +53,39 @@ app.use(express.urlencoded({ extended: true })); // Xử lý form data
 // API nhận file ECG (.mat) từ phía client
 app.post("/upload", upload.single("file"), async (req, res) => {
     if (!req.file) {
-        return res.status(400).json({ error: "No file uploaded" });
+        return res.status(400).json({ error: "Không có file được tải lên" });
     }
 
     const inputFilePath = req.file.path;
     const outputFolder = path.join(__dirname, "public", "ecg_results", Date.now().toString());
 
     try {
-        // Tạo thư mục lưu kết quả nếu chưa có
         await fs.ensureDir(outputFolder);
 
-        // Gọi script Python để xử lý file
-        spawn(`python process_ecg.py "${inputFilePath}" "${outputFolder}"`, async (error) => {
-            if (error) {
-                console.error("Error executing Python script:", error);
-                return res.status(500).json({ error: "Error processing file" });
-            }
+        // Chạy script Python bằng spawn (không dùng exec)
+        const py = spawn("python", ["process_ecg.py", inputFilePath, outputFolder]);
 
-            try {
-                // Xóa file tạm thời sau khi xử lý xong
-                await fs.remove(inputFilePath);
-
-                // Trả về đường dẫn thư mục chứa ảnh
-                res.json({ folder: `ecg_results/${path.basename(outputFolder)}` });
-            } catch (err) {
-                res.status(500).json({ error: "Error processing results" });
-            }
+        py.stdout.on("data", (data) => {
+            console.log(`stdout: ${data}`);
         });
+
+        py.stderr.on("data", (data) => {
+            console.error(`stderr: ${data}`);
+        });
+
+        py.on("close", async (code) => {
+            await fs.remove(inputFilePath); // Xóa file gốc sau xử lý
+
+            if (code !== 0) {
+                return res.status(500).json({ error: `Xử lý thất bại (mã lỗi ${code})` });
+            }
+
+            res.json({ folder: `ecg_results/${path.basename(outputFolder)}` });
+        });
+
     } catch (err) {
-        res.status(500).json({ error: "Error creating directory" });
+        console.error("Lỗi khi xử lý file:", err);
+        res.status(500).json({ error: "Lỗi xử lý file" });
     }
 });
 
