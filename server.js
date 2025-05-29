@@ -63,11 +63,20 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         // Tạo thư mục lưu kết quả nếu chưa có
         await fs.ensureDir(outputFolder);
 
+        // Kiểm tra file script Python có tồn tại không
+        const pythonScriptPath = path.join(__dirname, "process_ecg.py");
+        const scriptExists = await fs.pathExists(pythonScriptPath);
+        if (!scriptExists) {
+            await fs.remove(inputFilePath);
+            return res.status(500).json({ error: "Python script not found" });
+        }
+
         // Gọi script Python để xử lý file
-        exec(`python process_ecg.py "${inputFilePath}" "${outputFolder}"`, async (error) => {
+        exec(`python "${pythonScriptPath}" "${inputFilePath}" "${outputFolder}"`, async (error, stdout, stderr) => {
             if (error) {
                 console.error("Error executing Python script:", error);
-                return res.status(500).json({ error: "Error processing file" });
+                await fs.remove(inputFilePath);
+                return res.status(500).json({ error: "Error processing file", details: stderr || error.message });
             }
 
             try {
