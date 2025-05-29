@@ -23,28 +23,20 @@ mongoose.connect("mongodb+srv://zzzvuongldk:Vl271104*@cluster0.imgttoi.mongodb.n
 });
 
 // Cấu hình multer để lưu file tải lên vào thư mục "uploads/"
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
         const uploadDir = path.join(__dirname, "uploads");
-        fs.ensureDirSync(uploadDir);
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
         cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}_${file.originalname}`);
     },
-});
+})
 
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // Tối đa 5MB
-    fileFilter: (req, file, cb) => {
-        const ext = path.extname(file.originalname).toLowerCase();
-        if (ext !== ".mat") {
-            return cb(new Error("Chỉ hỗ trợ file .mat"));
-        }
-        cb(null, true);
-    }
-});
+var upload = multer({ storage: storage });
 
 app.use(express.static("public"));
 app.use(express.json()); // Xử lý dữ liệu JSON
@@ -63,20 +55,11 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         // Tạo thư mục lưu kết quả nếu chưa có
         await fs.ensureDir(outputFolder);
 
-        // Kiểm tra file script Python có tồn tại không
-        const pythonScriptPath = path.join(__dirname, "process_ecg.py");
-        const scriptExists = await fs.pathExists(pythonScriptPath);
-        if (!scriptExists) {
-            await fs.remove(inputFilePath);
-            return res.status(500).json({ error: "Python script not found" });
-        }
-
         // Gọi script Python để xử lý file
-        exec(`python "${pythonScriptPath}" "${inputFilePath}" "${outputFolder}"`, async (error, stdout, stderr) => {
+        exec(`python process_ecg.py "${inputFilePath}" "${outputFolder}"`, async (error) => {
             if (error) {
                 console.error("Error executing Python script:", error);
-                await fs.remove(inputFilePath);
-                return res.status(500).json({ error: "Error processing file", details: stderr || error.message });
+                return res.status(500).json({ error: "Error processing file" });
             }
 
             try {
