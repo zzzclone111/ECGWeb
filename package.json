@@ -3,10 +3,9 @@
     "version": "1.0.0",
     "main": "server.js",
     "scripts": {
-      "start": "node server.js"
+      "start": "NODE_ENV=production node server.js"
     },
     "dependencies": {
-      "bcrypt": "^5.1.1",
       "bcryptjs": "^3.0.2",
       "body-parser": "^1.20.3",
       "child_process": "^1.0.2",

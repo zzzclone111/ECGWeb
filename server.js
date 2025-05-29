@@ -1,6 +1,6 @@
 const express = require("express"); // Framework Express để tạo server web
 const multer = require("multer"); // Multer để xử lý file upload
-const { exec } = require("child_process"); // exec để chạy lệnh hệ thống (Python script)
+const { spawn } = require("child_process"); // exec để chạy lệnh hệ thống (Python script)
 const path = require("path"); // Module path để xử lý đường dẫn file
 const bcrypt = require("bcryptjs"); // Mã hóa mật khẩu
 const jwt = require("jsonwebtoken"); // JSON Web Token
@@ -56,7 +56,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         await fs.ensureDir(outputFolder);
 
         // Gọi script Python để xử lý file
-        exec(`python process_ecg.py "${inputFilePath}" "${outputFolder}"`, async (error) => {
+        spawn(`python process_ecg.py "${inputFilePath}" "${outputFolder}"`, async (error) => {
             if (error) {
                 console.error("Error executing Python script:", error);
                 return res.status(500).json({ error: "Error processing file" });
