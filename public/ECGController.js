@@ -24,7 +24,7 @@ async function uploadFile() {
         }
 
         // Gửi đến server vẽ biểu đồ (node server ở localhost)
-        let viewResponse = await fetch("https://vuongle.id.vn/upload", {
+        let viewResponse = await fetch("http://localhost:3000/upload", {
             method: "POST",
             body: formData // gửi lại file cho server vẽ ảnh
         });
