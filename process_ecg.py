@@ -547,7 +547,7 @@ lead_names = ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5
 
 # Vẽ từng đạo trình và xác định đỉnh R
 for i in range(12):
-    plt.figure(figsize=(42, 7))
+    plt.figure(figsize=(24, 8))
     # Chọn đạo trình (ví dụ: Lead II là chuẩn nhất để phát hiện đỉnh R)
     ecg_signal = ecg_data[i, :]
 
@@ -598,7 +598,7 @@ for i in range(12):
 
 # Vẽ ảnh 12 đạo trình ECG và xác định đỉnh R
 # Kích thước khung hình vẽ
-plt.figure(figsize=(90, 20))
+plt.figure(figsize=(90, 12))
 for i in range(12):
     plt.subplot(4, 3, i+1)
 
