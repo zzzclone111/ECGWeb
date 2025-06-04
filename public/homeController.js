@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const loginIcon = document.querySelector('#navbar li:nth-child(4)');
     const userIcon = document.querySelector('#navbar li:nth-child(5)');
-
+    const signupBtn = document.getElementById("signUpBtn");
     if (token) {
       // Đã đăng nhập
       loginIcon.style.display = "none";
@@ -14,12 +14,16 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         if (confirm("Bạn có muốn đăng xuất không?")) {
           localStorage.removeItem("token");
-          window.location.href = "login.html"; // hoặc reload lại trang hiện tại
+          window.location.href = "login.html";
         }
       });
     } else {
       // Chưa đăng nhập
       loginIcon.style.display = "inline-block";
       userIcon.style.display = "none";
+      signupBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        window.location.href = "signUp.html";
+      });
     }
 });
