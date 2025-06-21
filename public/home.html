@@ -16,7 +16,14 @@
                 <li><a href="home.html#contact_section" aria-label="Contact">Contact</a></li>
                 <li><a href="ECG.html" aria-label="ECG">ECG</a></li>
                 <li><a href="login.html" aria-label="Login"><i class="fa-solid fa-user"></i></a></li>
-                <li style="display: none;"><a href="" aria-label="User" id="user"><i class="fa-solid fa-user"></i></a></li>
+                <!-- <li style="display: none;"><a href="" aria-label="User" id="user"><i class="fa-solid fa-user"></i></a></li> -->
+                <li id="user-menu-wrapper" style="position: relative; display: none;">
+                    <a href="#" id="user" aria-label="User"><i class="fa-solid fa-user"></i></a>
+                    <ul id="user-dropdown" style="display: none; position: absolute; right: 0; top: 40px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-radius: 6px; min-width: 150px; z-index: 100;">
+                        <li><a href="#" id="changePassword">Đổi mật khẩu</a></li>
+                        <li><a href="#" id="logout">Đăng xuất</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </section>

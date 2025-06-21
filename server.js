@@ -179,6 +179,19 @@ app.get("/history", async (req, res) => {
     }
 });
 
+app.post("/changePass", async (req, res) => {
+    const { username, currPass, newPass } = req.body;
+    const user = await User.findOne({ username });
+    if (!user) return res.status(404).json({ message: "Không tìm thấy user" });
+
+    const isMatch = await bcrypt.compare(currPass, user.password);
+    if (!isMatch) return res.status(400).json({ message: "Mật khẩu cũ không đúng" });
+
+    user.password = await bcrypt.hash(newPass, 10);
+    await user.save();
+    res.json({ message: "Đổi mật khẩu thành công" });
+});
+
 // Khởi động server
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {

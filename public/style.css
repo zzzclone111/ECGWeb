@@ -317,6 +317,41 @@
     border-bottom: 2px solid hsl(327, 90%, 28%);
 }
 
+#user-menu-wrapper {
+    position: relative;
+}
+
+#user-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-radius: 6px;
+    min-width: 150px;
+    z-index: 100;
+    padding: 0;
+    margin: 0;
+}
+
+#user-dropdown li {
+    list-style: none;
+}
+
+#user-dropdown li a {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 0;
+}
+
+#user-dropdown li a:hover {
+    background: #f0f0f0;
+    color: #000;
+}
+
 /* Ẩn label nhưng giữ cho screen reader */
 label {
     position: absolute;

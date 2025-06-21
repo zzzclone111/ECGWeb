@@ -1,4 +1,3 @@
-// mongoClient.js
 const mongoose = require("mongoose");
 
 mongoose.connect("mongodb+srv://zzzvuongldk:Vl271104*@cluster0.mongodb.net/myapp", {
